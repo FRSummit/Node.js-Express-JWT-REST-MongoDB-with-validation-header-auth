@@ -1,0 +1,92 @@
+>> npm init
+>> npm install express
+>> npm install --save-dev nodemon
+
+-> injex.js
+---------------------------------------------------------------------------
+    const express = require('express');
+    const app = express();
+    // import Routes
+    const authRoutes = require('./routes/auth');
+
+    // Route middleware
+    app.use('/api/user', authRoutes);
+
+    app.listen(3000, () => console.log('Server up and running'));
+---------------------------------------------------------------------------
+
+-> auth.js
+---------------------------------------------------------------------------
+    const router = require('express').Router();
+
+    router.post('/register', (req, res) => {
+        res.send('Register');
+    });
+
+    module.exports = router;
+---------------------------------------------------------------------------
+
+>> npm install mongoose
+>> npm install dotenv
+
+
+-> injex.js
+---------------------------------------------------------------------------
+    const express = require('express');
+    const app = express();
+    const dotenv = require('dotenv');
+    const mongoose = require('mongoose');
+
+    dotenv.config();
+
+    // import Routes
+    const authRoutes = require('./routes/auth');
+
+    // Route middleware
+    app.use('/api/user', authRoutes);
+
+    // Connect to DB
+    mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () => 
+        console.log('Connect to DB!')
+    );
+
+    app.listen(3000, () => console.log('Server up and running'));
+---------------------------------------------------------------------------
+
+-> User.js
+---------------------------------------------------------------------------
+    const mongoose = require('mongoose');
+    const userSchema = new mongoose.Schema({
+        name: {
+            type: String,
+            required: true,
+            min: 6,
+            max: 255
+        },
+        email: {
+            type: String,
+            required: true,
+            min: 6,
+            max: 255
+        },
+        password: {
+            type: String,
+            required: true,
+            min: 6,
+            max: 1024
+        },
+        date: {
+            type: Date,
+            default: Date.now
+        }
+    });
+
+    module.exports = mongoose.model('User', userSchema);
+---------------------------------------------------------------------------
+
+>> npm install @hapi/joi
+>> npm install --save @hapi/joi
+>> npm install --save @hapi/joi@15.0.3 [Worked for Joy.validate()]
+
+>> npm install bcryptjs
+>> npm install jsonwebtoken
